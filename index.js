@@ -1,6 +1,14 @@
-// index.js - Conexão WhatsApp
+// index.js - Conexão WhatsApp + Site Express
 require('dotenv').config();
-const { default: makeWASocket, useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion } = require('@whiskeysockets/baileys');
+require('./site'); // 🔗 Sobe também o servidor web (Render detecta a porta)
+
+const {
+    default: makeWASocket,
+    useMultiFileAuthState,
+    DisconnectReason,
+    fetchLatestBaileysVersion
+} = require('@whiskeysockets/baileys');
+
 const qrcode = require('qrcode-terminal');
 const fs = require('fs');
 const path = require('path');
@@ -8,17 +16,21 @@ const path = require('path');
 async function startBot() {
     const { state, saveCreds } = await useMultiFileAuthState(path.join(__dirname, 'auth_info'));
     const { version } = await fetchLatestBaileysVersion();
+
     const sock = makeWASocket({
         version,
         printQRInTerminal: false,
         auth: state,
     });
+
     sock.ev.on('connection.update', (update) => {
         const { qr, connection, lastDisconnect } = update;
+
         if (qr) {
-            console.log('\nEscaneie o QR code abaixo para conectar o bot ao WhatsApp:');
+            console.log('\n📲 Escaneie o QR code abaixo para conectar o bot ao WhatsApp:');
             qrcode.generate(qr, { small: true });
         }
+
         if (connection === 'close') {
             const reason = lastDisconnect?.error?.output?.statusCode;
             if (reason === DisconnectReason.loggedOut) {
@@ -31,6 +43,7 @@ async function startBot() {
             console.log('✅ Bot conectado ao WhatsApp!');
         }
     });
+
     sock.ev.on('creds.update', saveCreds);
 }
 
