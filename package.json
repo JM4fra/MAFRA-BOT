@@ -1,0 +1,15 @@
+{
+  "name": "mafrobot",
+  "version": "1.0.0",
+  "description": "Bot WhatsApp personalizado com Baileys, pronto para nuvem.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.6.0",
+    "qrcode-terminal": "^0.12.0",
+    "express": "^4.18.2",
+    "dotenv": "^16.0.3"
+  }
+}
