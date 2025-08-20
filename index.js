@@ -5,8 +5,6 @@ const qrcode = require('qrcode-terminal');
 const fs = require('fs');
 const path = require('path');
 
-console.log('Iniciando bot...');
-
 async function startBot() {
     const { state, saveCreds } = await useMultiFileAuthState(path.join(__dirname, 'auth_info'));
     const { version } = await fetchLatestBaileysVersion();
